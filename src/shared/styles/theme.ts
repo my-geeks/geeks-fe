@@ -1,3 +1,38 @@
+import { css } from 'styled-components';
+
+const f = (fontSize: string, fontWeight: number, lineHeight: string) => css`
+  font-size: ${fontSize};
+  font-weight: ${fontWeight};
+  line-height: ${lineHeight};
+`;
+
+export const fonts = {
+  // Heading
+  heading1Bold:    f('32px', 700, '44px'),
+  heading2Bold:    f('28px', 700, '36px'),
+  heading3Bold:    f('24px', 700, '32px'),
+
+  // Title
+  title1SemiBold:  f('24px', 600, '32px'),
+  title2Bold:      f('20px', 700, '28px'),
+  title2SemiBold:  f('20px', 600, '28px'),
+  title3Bold:      f('18px', 700, '24px'),
+  title3SemiBold:  f('18px', 600, '24px'),
+  title3Medium:    f('18px', 500, '24px'),
+  title4Bold:      f('16px', 700, '24px'),
+  title4SemiBold:  f('16px', 600, '24px'),
+  title4Medium:    f('16px', 500, '24px'),
+
+  // Body
+  body1Bold:       f('16px', 700, '24px'),
+  body1SemiBold:   f('16px', 600, '24px'),
+  body1Medium:     f('16px', 500, '24px'),
+  body2SemiBold:   f('14px', 600, '18px'),
+  body2Medium:     f('14px', 500, '18px'),
+  body3SemiBold:   f('12px', 600, '16px'),
+  body3Medium:     f('12px', 500, '16px'),
+};
+
 export const colors = {
   // wt/bk
   white: '#ffffff',
@@ -127,6 +162,7 @@ export const colors = {
 
 export const theme = {
   colors,
+  fonts,
 };
 
 export type Theme = typeof theme;
