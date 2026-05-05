@@ -1,4 +1,7 @@
-import { css, styled } from 'styled-components';
+import { css, styled, useTheme } from 'styled-components';
+import addDefaultIcon from '../../assets/icons/commons/add-default.svg';
+import addGrayIcon from '../../assets/icons/commons/add-gray.svg';
+import rightArrowIcon from '../../assets/icons/commons/right-arrow.svg';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'outlined';
 export type ButtonSize = 'xl' | 'lg' | 'md' | 'sm' | 'xs';
@@ -8,8 +11,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   selected?: boolean;
   fullWidth?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  leftIcon?: boolean;
+  rightArrow?: boolean;
   subText?: string;
   children: React.ReactNode;
 }
@@ -23,35 +26,32 @@ type StyledProps = {
 };
 
 const sizeMap = {
-  xl: { height: '56px', padding: '0 20px', radius: '16px', font: 'body1Bold' as const },
-  lg: { height: '48px', padding: '0 16px', radius: '12px', font: 'body1Bold' as const },
-  md: { height: '40px', padding: '0 14px', radius: '10px', font: 'body1Medium' as const },
-  sm: { height: '36px', padding: '0 12px', radius: '8px',  font: 'body2SemiBold' as const },
-  xs: { height: '28px', padding: '0 10px', radius: '6px',  font: 'body3SemiBold' as const },
+  xl: { height: '64px', padding: '18px 20px', vPadding: '18px 20px', radius: '12px', font: 'title2Bold' as const },
+  lg: { height: '64px', padding: '18px 20px', vPadding: '18px 20px', radius: '12px', font: 'title2Bold' as const },
+  md: { height: '64px', padding: '18px 16px', vPadding: '18px 16px', radius: '12px', font: 'title2Bold' as const },
+  sm: { height: '64px', padding: '18px 16px', vPadding: '18px 16px', radius: '12px', font: 'title2Bold' as const },
+  xs: { height: '40px', padding: '8px 12px',  vPadding: '8px 12px',  radius: '8px',  font: 'body2SemiBold' as const },
 };
 
 const StyledButton = styled.button<StyledProps>`
   display: inline-flex;
-  align-items: ${({ $hasSubText }) => ($hasSubText ? 'flex-start' : 'center')};
-  justify-content: center;
-  flex-direction: ${({ $hasSubText }) => ($hasSubText ? 'column' : 'row')};
-  gap: ${({ $hasSubText }) => ($hasSubText ? '0' : '6px')};
+  flex-direction: row;
+  align-items: center;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
 
-  ${({ $size, $hasSubText, theme }) => css`
+  ${({ $size, $hasSubText }) => css`
     height: ${$hasSubText ? 'auto' : sizeMap[$size].height};
-    padding: ${$hasSubText ? `10px ${sizeMap[$size].padding.split(' ')[1]}` : sizeMap[$size].padding};
+    padding: ${$hasSubText ? sizeMap[$size].vPadding : sizeMap[$size].padding};
     border-radius: ${sizeMap[$size].radius};
-    ${theme.fonts[sizeMap[$size].font]}
   `}
 
   ${({ $variant, $selected, theme }) => {
     switch ($variant) {
       case 'primary':
         return css`
-          background: ${$selected ? theme.colors.yellow700 : theme.colors.yellow500};
+          background: ${$selected ? theme.colors.yellow600 : theme.colors.yellow500};
           color: ${theme.colors.gray900};
           border: none;
           &:hover:not(:disabled) { background: ${theme.colors.yellow600}; }
@@ -59,7 +59,7 @@ const StyledButton = styled.button<StyledProps>`
         `;
       case 'secondary':
         return css`
-          background: ${$selected ? theme.colors.yellowGray200 : theme.colors.yellowGray50};
+          background: ${$selected ? theme.colors.yellowGray200 : theme.colors.yellowGray100};
           color: ${theme.colors.yellowGray800};
           border: 1px solid ${theme.colors.yellowGray300};
           &:hover:not(:disabled) { background: ${theme.colors.yellowGray100}; }
@@ -75,11 +75,11 @@ const StyledButton = styled.button<StyledProps>`
         `;
       case 'outlined':
         return css`
-          background: transparent;
-          color: ${$selected ? theme.colors.gray800 : theme.colors.gray700};
-          border: 1px solid ${$selected ? theme.colors.gray800 : theme.colors.gray300};
-          &:hover:not(:disabled) { border-color: ${theme.colors.gray500}; color: ${theme.colors.gray800}; }
-          &:disabled { border-color: ${theme.colors.gray200}; color: ${theme.colors.gray400}; }
+          background: ${$selected ? theme.colors.gray50 : theme.colors.white};
+          color: ${theme.colors.gray700};
+          border: 1px solid ${theme.colors.gray200};
+          &:hover:not(:disabled) { background: ${theme.colors.gray50}; }
+          &:disabled { background: ${theme.colors.gray50}; color: ${theme.colors.gray400}; border-color: ${theme.colors.gray200}; }
         `;
     }
   }}
@@ -89,19 +89,57 @@ const StyledButton = styled.button<StyledProps>`
   }
 `;
 
-const Inner = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
+const LabelGroup = styled.span<{ $size: ButtonSize }>`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  gap: 2px;
+  ${({ theme, $size }) => theme.fonts[sizeMap[$size].font]}
 `;
 
 const SubText = styled.span`
   ${({ theme }) => theme.fonts.body3Medium}
   color: inherit;
-  opacity: 0.7;
-  width: 100%;
+  opacity: 0.6;
 `;
+
+const IconWrapper = styled.span`
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+`;
+
+const CircleIconWrapper = styled.span<{ $bg: string }>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: ${({ $bg }) => $bg};
+  flex-shrink: 0;
+`;
+
+function LeftIconRenderer({ variant }: { variant: ButtonVariant }) {
+  const theme = useTheme();
+
+  if (variant === 'primary') {
+    return (
+      <CircleIconWrapper $bg={theme.colors.yellow200}>
+        <img src={addDefaultIcon} alt="" width={20} height={20} />
+      </CircleIconWrapper>
+    );
+  }
+  if (variant === 'secondary') {
+    return (
+      <CircleIconWrapper $bg={theme.colors.yellowGray50}>
+        <img src={addGrayIcon} alt="" width={20} height={20} />
+      </CircleIconWrapper>
+    );
+  }
+  return <img src={addGrayIcon} alt="" width={20} height={20} />;
+}
 
 export function Button({
   variant = 'primary',
@@ -109,7 +147,7 @@ export function Button({
   selected,
   fullWidth,
   leftIcon,
-  rightIcon,
+  rightArrow,
   subText,
   children,
   ...props
@@ -123,12 +161,20 @@ export function Button({
       $hasSubText={!!subText}
       {...props}
     >
-      <Inner>
-        {leftIcon}
-        <span style={{ flex: 1 }}>{children}</span>
-        {rightIcon}
-      </Inner>
-      {subText && <SubText>{subText}</SubText>}
+      {leftIcon && (
+        <IconWrapper style={{ marginRight: 8 }}>
+          <LeftIconRenderer variant={variant} />
+        </IconWrapper>
+      )}
+      <LabelGroup $size={size}>
+        <span>{children}</span>
+        {subText && <SubText>{subText}</SubText>}
+      </LabelGroup>
+      {rightArrow && (
+        <IconWrapper style={{ marginLeft: 8 }}>
+          <img src={rightArrowIcon} alt="" width={16} height={16} />
+        </IconWrapper>
+      )}
     </StyledButton>
   );
 }
