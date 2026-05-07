@@ -26,11 +26,11 @@ type StyledProps = {
 };
 
 const sizeMap = {
-  xl: { height: '64px', padding: '18px 20px', vPadding: '18px 20px', radius: '12px', font: 'title2Bold' as const },
-  lg: { height: '64px', padding: '18px 20px', vPadding: '18px 20px', radius: '12px', font: 'title2Bold' as const },
-  md: { height: '64px', padding: '18px 16px', vPadding: '18px 16px', radius: '12px', font: 'title2Bold' as const },
-  sm: { height: '64px', padding: '18px 16px', vPadding: '18px 16px', radius: '12px', font: 'title2Bold' as const },
-  xs: { height: '40px', padding: '8px 12px',  vPadding: '8px 12px',  radius: '8px',  font: 'body2SemiBold' as const },
+  xl: { height: '64px', padding: '18px 20px', vPadding: '18px 20px', radius: '12px', font: 'title3SemiBold' as const },
+  lg: { height: '64px', padding: '18px 20px', vPadding: '18px 20px', radius: '12px', font: 'title3SemiBold' as const },
+  md: { height: '64px', padding: '18px 16px', vPadding: '18px 16px', radius: '12px', font: 'title3SemiBold' as const },
+  sm: { height: '64px', padding: '18px 16px', vPadding: '18px 16px', radius: '12px', font: 'title3SemiBold' as const },
+  xs: { height: '40px', padding: '8px 12px',  vPadding: '8px 12px',  radius: '8px',  font: 'body1SemiBold' as const },
 };
 
 const StyledButton = styled.button<StyledProps>`
@@ -47,15 +47,15 @@ const StyledButton = styled.button<StyledProps>`
     border-radius: ${sizeMap[$size].radius};
   `}
 
-  ${({ $variant, $selected, theme }) => {
+  ${({ $variant, $selected, $size, $hasSubText, theme }) => {
     switch ($variant) {
       case 'primary':
         return css`
           background: ${$selected ? theme.colors.yellow600 : theme.colors.yellow500};
-          color: ${theme.colors.gray900};
+          color: ${theme.colors.gray800};
           border: none;
           &:hover:not(:disabled) { background: ${theme.colors.yellow600}; }
-          &:disabled { background: ${theme.colors.gray100}; color: ${theme.colors.gray400}; }
+          &:disabled { background: ${theme.colors.gray50}; color: ${theme.colors.gray400}; }
         `;
       case 'secondary':
         return css`
@@ -67,6 +67,7 @@ const StyledButton = styled.button<StyledProps>`
         `;
       case 'tertiary':
         return css`
+          ${!$hasSubText && $size !== 'xs' && 'height: 56px;'}
           background: ${$selected ? theme.colors.gray300 : theme.colors.gray100};
           color: ${theme.colors.gray700};
           border: none;
