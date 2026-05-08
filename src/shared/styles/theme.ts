@@ -1,36 +1,35 @@
 import { css } from 'styled-components';
 
-const f = (fontSize: string, fontWeight: number, lineHeight: string) => css`
+const f = (fontSize: string, fontWeight: number) => css`
   font-size: ${fontSize};
   font-weight: ${fontWeight};
-  line-height: ${lineHeight};
 `;
 
 export const fonts = {
   // Heading
-  heading1Bold:    f('32px', 700, '44px'),
-  heading2Bold:    f('28px', 700, '36px'),
-  heading3Bold:    f('24px', 700, '32px'),
+  heading1Bold:    f('32px', 700),
+  heading2Bold:    f('28px', 700),
+  heading3Bold:    f('24px', 700),
 
   // Title
-  title1SemiBold:  f('24px', 600, '32px'),
-  title2Bold:      f('20px', 700, '28px'),
-  title2SemiBold:  f('20px', 600, '28px'),
-  title3Bold:      f('18px', 700, '24px'),
-  title3SemiBold:  f('18px', 600, '24px'),
-  title3Medium:    f('18px', 500, '24px'),
-  title4Bold:      f('16px', 700, '24px'),
-  title4SemiBold:  f('16px', 600, '24px'),
-  title4Medium:    f('16px', 500, '24px'),
+  title1SemiBold:  f('24px', 600),
+  title2Bold:      f('20px', 700),
+  title2SemiBold:  f('20px', 600),
+  title3Bold:      f('18px', 700),
+  title3SemiBold:  f('18px', 600),
+  title3Medium:    f('18px', 500),
+  title4Bold:      f('16px', 700),
+  title4SemiBold:  f('16px', 600),
+  title4Medium:    f('16px', 500),
 
   // Body
-  body1Bold:       f('16px', 700, '24px'),
-  body1SemiBold:   f('16px', 600, '24px'),
-  body1Medium:     f('16px', 500, '24px'),
-  body2SemiBold:   f('14px', 600, '18px'),
-  body2Medium:     f('14px', 500, '18px'),
-  body3SemiBold:   f('12px', 600, '16px'),
-  body3Medium:     f('12px', 500, '16px'),
+  body1Bold:       f('16px', 700),
+  body1SemiBold:   f('16px', 600),
+  body1Medium:     f('16px', 500),
+  body2SemiBold:   f('14px', 600),
+  body2Medium:     f('14px', 500),
+  body3SemiBold:   f('12px', 600),
+  body3Medium:     f('12px', 500),
 };
 
 export const colors = {
